@@ -1,4 +1,4 @@
-requires 'perl', '5.10';
+requires 'perl', '5.10.1';
 
 requires 'Kelp', 0;
 requires 'Kelp::Base', 0;
