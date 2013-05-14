@@ -39,7 +39,8 @@
             "Class::Load" : "0",
             "Kelp::Base" : "0",
             "Sub::Install" : "0",
-            "Validate::Tiny" : "0"
+            "Validate::Tiny" : "0",
+            "perl" : "5.008005"
          }
       },
       "test" : {
@@ -47,7 +48,7 @@
             "HTTP::Request::Common" : "0",
             "Kelp" : "0",
             "Kelp::Test" : "0",
-            "Test::More" : "0",
+            "Test::More" : "0.88",
             "strict" : "0"
          }
       }
