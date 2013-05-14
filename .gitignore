@@ -1,0 +1,6 @@
+/Kelp-Module-ValidateTiny-*
+/.build
+/_build*
+/Build
+MYMETA.*
+!META.json
