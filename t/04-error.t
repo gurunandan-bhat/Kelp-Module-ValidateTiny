@@ -1,0 +1,49 @@
+use Kelp::Base -strict;
+ 
+use Kelp;
+use Kelp::Test;
+use HTTP::Request::Common;
+use Test::More;
+
+my $app = Kelp->new( mode => '02-config' );
+my $t = Kelp::Test->new( app => $app );
+
+$app->add_route('/home/:id/:name', sub {
+    
+    my $self = shift;
+    my $rules = {
+        fields => [ qw{id name} ],
+        filters => [
+           qr/.+/ => filter('trim'),
+           name => filter('uc'),
+        ],
+        checks => [
+           qr/.+/ => is_required(),
+           name => sub {return (shift eq 'PERL') ? undef : 'Value must be PERL';},
+        ],
+    };
+    
+    my $res = $self->validate($rules, {
+    	on_error => 'form.tt',
+    	data => {
+    		message => 'Fail!',
+    	}
+    });
+    return $res->response 
+        unless $res->success;
+   
+    $self->template('form.tt', $res->data);
+});
+
+$t->request( GET '/home/42/perl', Content_Type => 'text/plain' )
+  ->code_is(200)
+  ->content_is('42|PERL');
+
+$t->request( GET '/home/42/Python', Content_Type => 'text/plain' )
+  ->code_is(200)
+  ->content_is('0');
+
+done_testing;
+
+
+

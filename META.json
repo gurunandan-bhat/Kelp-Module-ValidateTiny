@@ -42,6 +42,7 @@
             "Module::Build::Tiny" : "0",
             "Sub::Install" : "0",
             "Validate::Tiny" : "0",
+            "parent" : "0",
             "perl" : "v5.10.1"
          }
       },

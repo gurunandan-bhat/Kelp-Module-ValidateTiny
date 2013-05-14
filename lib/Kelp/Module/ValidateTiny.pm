@@ -1,3 +1,4 @@
+{
 package Kelp::Module::ValidateTiny;
 
 use Kelp::Base 'Kelp::Module';
@@ -99,7 +100,7 @@ sub _validate {
     );
     
     # There are errors and a template is passed
-
+   
     my $data = $result->data;
     $data->{error} = $result->error;
 
@@ -109,8 +110,40 @@ sub _validate {
             %{$args{data}},
         };
     }
+    
+    return Validate::Tiny::PlackResponse->enhance(
+        $result, 
+        $self->res->template($args{on_error}, $data)
+    );
+}
 
-    $self->res->template($args{on_error}, $data);
+}
+
+
+{
+	package Validate::Tiny::PlackResponse;
+	use parent Validate::Tiny;
+	
+	sub enhance {
+		
+		my ($class, $obj, $response) = @_;
+        die "Incorrect Parent Class. Not an instance of Validate::Tiny::PlackResponse" 
+          unless ref($obj) eq 'Validate::Tiny';
+
+        $obj->{_kmvt_response} = $response;
+        bless $obj, $class;
+        
+        return $obj;
+	}
+	
+	sub response {
+		
+		my $self = shift;
+        die "Incorrect Parent Class. Not an instance of Validate::Tiny::PlackResponse" 
+          unless ref($self) eq 'Validate::Tiny';
+          
+        return $self->{_kmvt_response} ;
+	}
 }
 
 1;
