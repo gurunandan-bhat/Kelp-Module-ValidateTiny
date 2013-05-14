@@ -45,12 +45,23 @@ Version 0.01
     # to the template, but you can optionally pass some 
     # more data to that template
 
-    $self->validate($rules, 
+    my $result = $self->validate($rules, 
         on_error => 'form.tt',
         data => {
             message => 'You could try something else'
         },
     );
+    # If validation fails, $result is an instance of 
+    # Validate::Tiny::PlackResponse and has a response 
+    # method that can be sent
+    return $result->response unless $result->success
+    
+
+    # All data is valid here.
+    # use $result->data
+      
+
+
 
 # DESCRIPTION
 
@@ -70,24 +81,41 @@ methods on it.
     # $result is now a Validate::Tiny object
     
 
-Second you can pass it a name ('on\_fail') and value (a template filename) pair. 
+Second you can pass it a name ('on\_error') and value (a template filename) pair. 
 If your data passed the validation, the return value is the usual V::T object. 
-However, if validation fails, the function does not return but renders the 
-template file that you passed it with the same parameters (get, post, named) 
-that it received plus an additional key 'error' that points to a hashref whose 
-key value pairs are the field names and error messages.
+However, if validation fails, the validate method returns an object that has 
+a "response" method in addition to all the Validate::Tiny methods.
 
     my $result = $self->validate(
         $rules,
         on_error => 'form'
     );
-    
+    return $result->response unless $result->success # form.tt rendered
+    ...
+    # Your data was valid here
+    ...
+    # Return some other response    
 
-    # You reached here because all validations passed.
-    # You can now call $result->data to get the filtered
-    # validated data 
+Note that calling $result->response if your validations succeeded is a fatal 
+error. The template (form.tt in the code above) is rendered with a hashref
+that contains the key-value pairs of valid parameters plus a key "error" that
+points to another hashref with names of invalid parameters as keys and the 
+corresponding error messages as values. So if your parameters were 
 
-This can be useful with a construct like `[% error.name | name %]` 
+    {id => 41, lang => 'Perl', version => '5.10'}
+
+and id was found to be invalid with your rules/checks, then the template 
+'form.tt' renderer is passed the following hashref:
+
+    {
+    	lang => 'Perl',
+    	version => '5.10',
+    	error {
+    		id => 'The answer is 42, not 41',
+    	}
+    }
+
+This can be useful with a construct like `[% error.name || name %]` 
 in your template.
 
 Third, you can pass some additional values that will be passed "as is"" to the 
@@ -97,9 +125,23 @@ on\_fail template
     $self->validate($rules, 
         on_error => 'form.tt',
         data => {
-            helpful_message => 'You could try something else next time!'
+            message => 'You could try something else next time!'
         },
     );
+
+Here the caller passes an additional key data so that your `on_error` template 
+renderer gets the following hash ref
+
+    {
+        lang => 'Perl',
+        version => '5.10',
+        error {
+            id => 'The answer is 42, not 41',
+        },
+        message => 'You could try something else next time!'
+    }
+
+
 
 # AUTHOR
 
