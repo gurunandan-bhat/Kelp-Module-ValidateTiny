@@ -37,10 +37,12 @@
       "runtime" : {
          "requires" : {
             "Class::Load" : "0",
+            "Kelp" : "0",
             "Kelp::Base" : "0",
+            "Module::Build::Tiny" : "0",
             "Sub::Install" : "0",
             "Validate::Tiny" : "0",
-            "perl" : "5.008005"
+            "perl" : "5.10"
          }
       },
       "test" : {
