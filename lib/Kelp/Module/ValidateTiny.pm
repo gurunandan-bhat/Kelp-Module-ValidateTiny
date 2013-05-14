@@ -127,7 +127,7 @@ sub _validate {
 	sub enhance {
 		
 		my ($class, $obj, $response) = @_;
-        die "Incorrect Parent Class. Not an instance of Validate::Tiny::PlackResponse" 
+        die "Incorrect Parent Class. Not an instance of Validate::Tiny" 
           unless ref($obj) eq 'Validate::Tiny';
 
         $obj->{_kmvt_response} = $response;
@@ -140,7 +140,7 @@ sub _validate {
 		
 		my $self = shift;
         die "Incorrect Parent Class. Not an instance of Validate::Tiny::PlackResponse" 
-          unless ref($self) eq 'Validate::Tiny';
+          unless ref($self) eq 'Validate::Tiny::PlackResponse';
           
         return $self->{_kmvt_response} ;
 	}

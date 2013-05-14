@@ -23,25 +23,25 @@ $app->add_route('/home/:id/:name', sub {
         ],
     };
     
-    my $res = $self->validate($rules, {
+    my $rval = $self->validate($rules,
     	on_error => 'form.tt',
     	data => {
     		message => 'Fail!',
     	}
-    });
-    return $res->response 
-        unless $res->success;
+    );
+    return $rval->response 
+        unless $rval->success;
    
-    $self->template('form.tt', $res->data);
+    $self->template('success.tt', $rval->data);
 });
 
 $t->request( GET '/home/42/perl', Content_Type => 'text/plain' )
   ->code_is(200)
-  ->content_is('42|PERL');
+  ->content_is('|42|PERL|');
 
 $t->request( GET '/home/42/Python', Content_Type => 'text/plain' )
   ->code_is(200)
-  ->content_is('0');
+  ->content_is('42|Value must be PERL|Fail!');
 
 done_testing;
 
