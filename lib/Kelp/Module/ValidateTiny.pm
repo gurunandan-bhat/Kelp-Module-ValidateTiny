@@ -8,7 +8,7 @@ use Validate::Tiny;
 use Class::Load;
 use Sub::Install;
 
-our $VERSION = '0.02';
+our $VERSION = '0.03';
 
 # These are Validate::Tiny functions that we 
 # forward into the application namespace
