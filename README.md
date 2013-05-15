@@ -7,7 +7,7 @@ Kelp::Module::ValidateTiny - Validate parameters in a Kelp Route Handler
 Version 0.01
 
 # SYNOPSIS
-```perl
+
     use Kelp::Module::ValidateTiny;
     # inside your Kelp config file 
     {
@@ -59,7 +59,7 @@ Version 0.01
 
     # All data is valid here.
     # use $result->data
-```      
+      
 
 
 
@@ -77,17 +77,15 @@ First you can pass it just a valid Validate::Tiny $rules hash reference. It
 will return a Validate::Tiny object and you can call all the usual V::T
 methods on it.
 
-```perl
     my $result = $self->validate($rules);
     # $result is now a Validate::Tiny object
-```
+    
 
 Second you can pass it a name ('on\_error') and value (a template filename) pair. 
 If your data passed the validation, the return value is the usual V::T object. 
 However, if validation fails, the validate method returns an object that has 
 a "response" method in addition to all the Validate::Tiny methods.
 
-```perl
     my $result = $self->validate(
         $rules,
         on_error => 'form'
@@ -97,20 +95,18 @@ a "response" method in addition to all the Validate::Tiny methods.
     # Your data was valid here
     ...
     # Return some other response    
-```
 
 Note that calling $result->response if your validations succeeded is a fatal 
 error. The template (form.tt in the code above) is rendered with a hashref
 that contains the key-value pairs of valid parameters plus a key "error" that
 points to another hashref with names of invalid parameters as keys and the 
 corresponding error messages as values. So if your parameters were 
-```perl
+
     {id => 41, lang => 'Perl', version => '5.10'}
-```
+
 and id was found to be invalid with your rules/checks, then the template 
 'form.tt' renderer is passed the following hashref:
 
-```perl
     {
     	lang => 'Perl',
     	version => '5.10',
@@ -118,7 +114,6 @@ and id was found to be invalid with your rules/checks, then the template
     		id => 'The answer is 42, not 41',
     	}
     }
-```
 
 This can be useful with a construct like `[% error.name || name %]` 
 in your template.
@@ -126,19 +121,17 @@ in your template.
 Third, you can pass some additional values that will be passed "as is"" to the 
 on\_fail template  
     
-```perl
+
     $self->validate($rules, 
         on_error => 'form.tt',
         data => {
             message => 'You could try something else next time!'
         },
     );
-```
 
 Here the caller passes an additional key data so that your `on_error` template 
 renderer gets the following hash ref
 
-```perl
     {
         lang => 'Perl',
         version => '5.10',
@@ -147,7 +140,8 @@ renderer gets the following hash ref
         },
         message => 'You could try something else next time!'
     }
-```
+
+
 
 # AUTHOR
 
@@ -163,3 +157,5 @@ This library is free software; you can redistribute it and/or modify
 it under the same terms as Perl itself.
 
 # SEE ALSO
+
+[Kelp](http://search.cpan.org/perldoc?Kelp), [Kelp::Module](http://search.cpan.org/perldoc?Kelp::Module), [Validate::Tiny](http://search.cpan.org/perldoc?Validate::Tiny)
