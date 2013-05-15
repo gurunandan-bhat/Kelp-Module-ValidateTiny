@@ -104,9 +104,9 @@ error. The template (form.tt in the code above) is rendered with a hashref
 that contains the key-value pairs of valid parameters plus a key "error" that
 points to another hashref with names of invalid parameters as keys and the 
 corresponding error messages as values. So if your parameters were 
-
+```perl
     {id => 41, lang => 'Perl', version => '5.10'}
-
+```
 and id was found to be invalid with your rules/checks, then the template 
 'form.tt' renderer is passed the following hashref:
 
