@@ -1,6 +1,6 @@
 requires 'perl', '5.10.1';
 
-requires 'Kelp', 0;
+requires 'Kelp', 0.2191;
 requires 'Kelp::Base', 0;
 requires 'Validate::Tiny', 0;
 requires 'Sub::Install', 0;
