@@ -1,6 +1,7 @@
 Revision history for Kelp-Module-ValidateTiny
 
 {{$NEXT}}
+        - Tests now load configuration at runtime
 
 0.02  2013-05-15 00:57:19 IST
         - Initial release
