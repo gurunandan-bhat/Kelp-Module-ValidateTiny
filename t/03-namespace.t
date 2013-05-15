@@ -5,7 +5,12 @@ use Kelp::Test;
 use HTTP::Request::Common;
 use Test::More;
 
-my $app = Kelp->new( mode => '03-config' );
+my $app = Kelp->new();
+$app->load_module('ValidateTiny',
+    subs => [ qw{filter is_required} ],
+    into => [ qw{Kelp::TestApp} ]
+);
+
 my $t = Kelp::Test->new( app => $app );
 
 $app->add_route('/home/:id/:name', 'test_app#home');
