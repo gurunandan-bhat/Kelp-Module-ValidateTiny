@@ -31,6 +31,8 @@ $app->add_route('/home/:id/:name', sub {
     $self->res->text->render($val);
 });
 
+can_ok $app, $_ for qw{validate};
+
 $t->request( GET '/home/42/perl', Content_Type => 'text/plain' )
   ->code_is(200)
   ->content_is('42|PERL');
@@ -59,6 +61,8 @@ $app->add_route([POST => '/home'], sub {
    
     $self->res->text->render($val);
 });
+
+can_ok $app, $_ for qw{validate};
 
 $t->request( POST '/home', [id => 42, name => 'perl'] )
   ->code_is(200)

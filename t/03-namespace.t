@@ -16,6 +16,8 @@ my $t = Kelp::Test->new( app => $app );
 $app->add_route('/home/:id/:name', 'test_app#home');
 $app->add_route([POST => '/home'], 'test_app#home');
 
+can_ok $app, $_ for qw{validate};
+
 $t->request( GET '/home/42/perl', Content_Type => 'text/plain' )
   ->code_is(200)
   ->content_is('42|PERL');

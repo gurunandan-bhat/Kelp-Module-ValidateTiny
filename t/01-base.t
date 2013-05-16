@@ -47,6 +47,8 @@ $app->add_route('/home/:id', sub {
     $self->res->text->render($val);
 });
 
+can_ok $app, $_ for qw{validate};
+
 $t->request( GET '/home/42', Content_Type => 'text/plain' )
   ->code_is(200)
   ->content_is('42');

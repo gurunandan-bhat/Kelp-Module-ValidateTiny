@@ -37,6 +37,8 @@ $app->add_route('/home/:id/:name', sub {
     $self->template('success.tt', $rval->data);
 });
 
+can_ok $app, $_ for qw{validate};
+
 $t->request( GET '/home/42/perl', Content_Type => 'text/plain' )
   ->code_is(200)
   ->content_is('|42|PERL|');

@@ -111,7 +111,7 @@ sub _validate {
         };
     }
     
-    return Validate::Tiny::PlackResponse->enhance(
+    return Validate::Tiny::PlackResponse->new(
         $result, 
         $self->res->template($args{on_error}, $data)
     );
@@ -122,15 +122,21 @@ sub _validate {
 
 {
 	package Validate::Tiny::PlackResponse;
+
 	use parent Validate::Tiny;
+	use Scalar::Util qw{blessed refaddr};
 	
-	sub enhance {
+	my %_response;
+	
+	sub new {
 		
 		my ($class, $obj, $response) = @_;
+		
         die "Incorrect Parent Class. Not an instance of Validate::Tiny" 
-          unless ref($obj) eq 'Validate::Tiny';
+          unless blessed($obj) eq 'Validate::Tiny';
+    
+        $_response{refaddr $obj} = $response;
 
-        $obj->{_kmvt_response} = $response;
         bless $obj, $class;
         
         return $obj;
@@ -140,9 +146,19 @@ sub _validate {
 		
 		my $self = shift;
         die "Incorrect Parent Class. Not an instance of Validate::Tiny::PlackResponse" 
-          unless ref($self) eq 'Validate::Tiny::PlackResponse';
-          
-        return $self->{_kmvt_response} ;
+          unless blessed($self) eq 'Validate::Tiny::PlackResponse';
+        
+        return $_response{refaddr $self};   
+	}
+	
+	sub DESTROY {
+		
+		my $self = shift;
+
+		my $key = refaddr $self;
+		delete $_response{$key} if exists $_response{$key};
+        
+        $self->SUPER::DESTROY if $self->SUPER::can(DESTROY);		
 	}
 }
 
